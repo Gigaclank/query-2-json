@@ -1,6 +1,6 @@
 {
   "name": "query-2-json",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "convert a query string to a json structure",
   "main": "index.js",
   "scripts": {
