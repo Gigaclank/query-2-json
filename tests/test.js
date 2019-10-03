@@ -1,7 +1,7 @@
 var assert = require('assert');
 const q2j = require('../index')
 
-let q = "a != 1|| (b == 2 && c <= 3) && (d != 4)"
+let q = "(a != 1 || (b == 2 && c <= 3)) && (d != 4)"
 
 isObject = function (a) {
     return (!!a) && (a.constructor === Object);
@@ -25,7 +25,7 @@ describe('converts object to a string', function () {
     it('matches input', function () {
         let json = q2j(q, { brackets: ['()'] });
         let string = q2j(json)
-        assert.strictEqual(string === q, true);
+        assert.strictEqual(string == q, true);
     });
 });
 
