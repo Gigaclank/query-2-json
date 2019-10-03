@@ -1,5 +1,6 @@
 # query-2-json
-
+[![Build Status](https://travis-ci.com/Gigaclank/query-2-json.svg?branch=master)](https://travis-ci.com/Gigaclank/query-2-json)
+[![npm version](https://badge.fury.io/js/query-2-json.svg)](https://badge.fury.io/js/query-2-json)
 
 Inspired by [react-querybuilder](https://www.npmjs.com/package/react-querybuilder)
 

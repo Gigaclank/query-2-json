@@ -22,11 +22,11 @@ describe('converts object to a string', function () {
         let string = q2j(json)
         assert.strictEqual(typeof string, "string");
     });
-    // it('matches input', function () {
-    //     let json = q2j(q, { brackets: ['()'] });
-    //     let string = q2j(json)
-    //     assert.strictEqual(string === q, true);
-    // });
+    it('matches input', function () {
+        let json = q2j(q, { brackets: ['()'] });
+        let string = q2j(json)
+        assert.strictEqual(string === q, true);
+    });
 });
 
 describe('returns invalid when not a valid input', function () {
