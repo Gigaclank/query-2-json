@@ -1,7 +1,9 @@
 
 module.exports = query_2_json
 query_2_json.query2json = query2json
-query_2_json.json2query = json2query
+query_2_json.query2json = query2json
+query_2_json.json2tree = json2tree
+query_2_json.rule2tree = rule2tree
 
 function json2query(input) {
     /** Settings **/
@@ -271,6 +273,38 @@ function query2json(str, opts) {
         //console.log(tabs, "Exiting Level", level)
         return { id: "g-" + Math.random().toString(36).substr(2, 9), condition: combinator, rules: res }
     }({ str: res[0], refs: res })
+}
+function json2tree(obj) {
+    let treeObj = {
+        key: "",
+        title: "",
+        children: []
+    }
+    if (obj.id !== "" && obj.id !== undefined) {
+        if (obj.id.indexOf("g-") != -1) {
+            treeObj.key = obj.id
+            treeObj.title = obj.condition.toUpperCase()
+            obj.rules.forEach(r => {
+                let ch = rule2tree(r)
+                if (ch != null)
+                    treeObj.children.push(ch)
+            })
+
+        } else if (obj.id.indexOf("r-") != -1) {
+            treeObj.key = obj.id
+            treeObj.title = (obj.field || "") + " " + (obj.operator || "") + " " + (obj.value || "")
+            delete treeObj.children
+        }
+        return treeObj
+    }
+    return
+
+
+
+}
+
+function rule2tree(str) {
+    return json2tree(query2json(str, { brackets: ['()'] }))
 }
 
 function query_2_json(arg, opts) {

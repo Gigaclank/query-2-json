@@ -1,6 +1,7 @@
 # query-2-json
 [![Build Status](https://travis-ci.com/Gigaclank/query-2-json.svg?branch=master)](https://travis-ci.com/Gigaclank/query-2-json)
 [![npm version](https://badge.fury.io/js/query-2-json.svg)](https://badge.fury.io/js/query-2-json)
+[![npm](https://img.shields.io/npm/dm/query-2-json.svg)]()
 
 Inspired by [react-querybuilder](https://www.npmjs.com/package/react-querybuilder)
 
@@ -14,7 +15,7 @@ npm install query-2-json
 ``` js
 const q2j = require('query-2-json')
 
-let q = "a != 1|| (b == 2 && c <= 3) && (d != 4)"
+let q = "(a != 1 || (b == 2 && c <= 3)) && (d != 4)"
 
 let json = q2j(q, { brackets: ['()'] });
 console.log(JSON.stringify(json, null, 2))
