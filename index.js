@@ -285,7 +285,7 @@ function json2tree(obj) {
             treeObj.key = obj.id
             treeObj.title = obj.condition.toUpperCase()
             obj.rules.forEach(r => {
-                let ch = rule2tree(r)
+                let ch = json2tree(r)
                 if (ch != null)
                     treeObj.children.push(ch)
             })
@@ -304,7 +304,7 @@ function json2tree(obj) {
 }
 
 function rule2tree(str) {
-    return json2tree(query2json(str, { brackets: ['()'] }))
+    return json2tree(query_2_json(str, { brackets: ['()'] }))
 }
 
 function query_2_json(arg, opts) {
