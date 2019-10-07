@@ -11,55 +11,21 @@ function json2query(input) {
 
     var OperatorsFns = {
         equal: function (v) {
-            if (typeof v[1] == 'string') {
-                v[1] = v[1];
-            }
-            var getValue = parseFloat(v[1]);
-            if (!isNaN(getValue)) {
-                if (typeof getValue == 'number') {
-                    v[1] = getValue;
-                }
-            }
             return v[0] + " == " + v[1];
         },
         not_equal: function (v) {
-            if (typeof v[1] == 'string') {
-                v[1] = v[1];
-            }
-            var getValue = parseFloat(v[1]);
-            if (!isNaN(getValue)) {
-                if (typeof getValue == 'number') {
-                    v[1] = getValue;
-                }
-            }
             return v[0] + " != " + v[1];
         },
         less: function (v) {
-            var getValue = parseFloat(v[1]);
-            if (typeof getValue == 'number') {
-                v[1] = parseFloat(getValue);
-            }
             return v[0] + " < " + v[1];
         },
         less_or_equal: function (v) {
-            var getValue = parseFloat(v[1]);
-            if (typeof getValue == 'number') {
-                v[1] = parseFloat(getValue);
-            }
             return v[0] + " <= " + v[1];
         },
         greater: function (v) {
-            var getValue = parseFloat(v[1]);
-            if (typeof getValue == 'number') {
-                v[1] = parseFloat(getValue);
-            }
             return v[0] + " > " + v[1];
         },
         greater_or_equal: function (v) {
-            var getValue = parseFloat(v[1]);
-            if (typeof getValue == 'number') {
-                v[1] = parseFloat(getValue);
-            }
             return v[0] + " >= " + v[1];
         }
     }
@@ -71,10 +37,6 @@ function json2query(input) {
     var self = this;
 
     return (function parse(group, level = 0) {
-
-        if (!group.condition) {
-            group.condition = group.combinator;
-        }
 
         if (['AND', 'OR'].indexOf(group.condition.toUpperCase()) === -1) {
             throw new Error('Unable to build rule with condition ' + group.condition);
