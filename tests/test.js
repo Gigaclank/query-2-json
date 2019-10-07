@@ -16,16 +16,19 @@ describe('converts string to an object', function () {
     });
 
 });
-describe('converts object to a string', function () {
-    it('output is a string', function () {
-        let json = q2j(q, { brackets: ['()'] });
-        let string = q2j(json)
-        assert.strictEqual(typeof string, "string");
+describe('converts rule to tree and back again', function () {
+    let tree = null, rule = null
+    it('convert rule to tree', function () {
+        tree = q2j.rule2tree(q)
+        assert.strictEqual(isObject(tree), true);
     });
-    it('matches input', function () {
-        let json = q2j(q, { brackets: ['()'] });
-        let string = q2j(json)
-        assert.strictEqual(string == q, true);
+    it('convert tree to rule', function () {
+        rule = q2j.tree2rule(tree)
+        assert.strictEqual(typeof rule, "string");
+    });
+    it('converted rule matches input', function () {
+        rule = q2j.tree2rule(tree)
+        assert.strictEqual(rule === q, true);
     });
 });
 

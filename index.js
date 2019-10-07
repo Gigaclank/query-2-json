@@ -4,13 +4,10 @@ query_2_json.query2json = query2json
 query_2_json.query2json = query2json
 query_2_json.json2tree = json2tree
 query_2_json.rule2tree = rule2tree
+query_2_json.tree2json = tree2json
+query_2_json.tree2rule = tree2rule
 
 function json2query(input) {
-    /** Settings **/
-    var defaultCondition = 'AND';
-
-    /** Private Functions **/
-
 
     var OperatorsFns = {
         equal: function (v) {
@@ -67,7 +64,6 @@ function json2query(input) {
         }
     }
 
-    var output = [];
     if (!input) {
         return null;
     }
@@ -125,15 +121,9 @@ function json2query(input) {
                         op = "greater_or_equal";
                         break;
                 }
-
-
-
                 var expFunction = OperatorsFns[op];
-
                 var ruleExpression = {};
-
                 if (expFunction === undefined) {
-                    // throw new Error('Unknown rule operation for operator ' + rule.operator);
                     ruleExpression = ""
                 } else {
                     ruleExpression = expFunction.call(self, [rule.field, rule.value]);
@@ -142,10 +132,7 @@ function json2query(input) {
             }
         });
 
-        var groupExpression = {};
-
         var output = '';
-
         for (var i = 0; i < parts.length; i++) {
             if (typeof parts[i + 1] != 'undefined') {
                 if (parts[i] != "") {
@@ -167,9 +154,7 @@ function json2query(input) {
 }
 
 function query2json(str, opts) {
-    // pretend non-string parsed per-se
     if (typeof str !== 'string') return [str]
-
     var res = [str]
 
     if (typeof opts === 'string' || Array.isArray(opts)) {
@@ -223,20 +208,12 @@ function query2json(str, opts) {
     })
 
     var re = new RegExp('\\' + escape + '([0-9]+)' + '\\' + escape)
-
-    // transform references to tree
-
     return function nest({ str, refs, level = 0 }) {
         var res = [], match
-        let combinator = "and"
-        var a = 0
-        let tabs = ""
-        for (a = 0; a < level; a++) {
-            tabs += "\t"
-        }
-        // console.log(tabs, "Entering Level ", level, "STR:", str)
+        let condition = "and"
         let rules = str.trim().replace(" ", "").split(/[\|\&]{2}/g)//split by ||, && 
-        if (str.trim().replace(" ", "").indexOf("||") != -1) combinator = "or"
+        if (str.trim().replace(" ", "").indexOf("||") != -1) condition = "or"
+        var a = 0
         rules.forEach(r => {
             while (match = re.exec(r)) {
                 if (a++ > 10e3) throw Error('Circular references in parenthesis')
@@ -251,7 +228,6 @@ function query2json(str, opts) {
                     if (AND.length > 0 || OR.length > 0) {
                         res.push({ ...nest({ str: s, refs, level: level + 1 }) })
                     }
-
                 }
                 r = r.slice(match.index + (match[0].length + 1))//skips the next bracket
             }
@@ -265,13 +241,10 @@ function query2json(str, opts) {
                     operator,
                     value: fields[1] ? fields[1].trim() : ""
                 }
-                // console.log(rules, level)
                 res.push(obj)
             }
         })
-
-        //console.log(tabs, "Exiting Level", level)
-        return { id: "g-" + Math.random().toString(36).substr(2, 9), condition: combinator, rules: res }
+        return { id: "g-" + Math.random().toString(36).substr(2, 9), condition, rules: res }
     }({ str: res[0], refs: res })
 }
 function json2tree(obj) {
@@ -298,13 +271,46 @@ function json2tree(obj) {
         return treeObj
     }
     return
+}
 
+function tree2json(obj) {
+    let treeObj = {
+        id: "",
+        condition: "",
+        rules: []
+    }
+    if (obj.key !== "" && obj.key !== undefined) {
+        if (obj.key.indexOf("g-") != -1) {
+            treeObj.id = obj.key
+            treeObj.condition = obj.title.trim().toLowerCase()
+            obj.children.forEach(r => {
+                let ch = tree2json(r)
+                if (ch != null)
+                    treeObj.rules.push(ch)
+            })
 
-
+        } else if (obj.key.indexOf("r-") != -1) {
+            treeObj.id = obj.key
+            let rules = obj.title.trim().replace(" ", "");
+            let fields = rules.trim().split(/[\*\=\!\/\%\<\>]{1,3}/g)//split into left and right
+            let operator = rules.trim().replace(fields[0], "").replace(fields[1], "").trim()
+            treeObj.field = fields[0] ? fields[0].trim() : ""
+            treeObj.operator = operator
+            treeObj.value = fields[1] ? fields[1].trim() : ""
+            delete treeObj.condition
+            delete treeObj.rules
+        }
+        return treeObj
+    }
+    return
 }
 
 function rule2tree(str) {
     return json2tree(query_2_json(str, { brackets: ['()'] }))
+}
+function tree2rule(tree) {
+    let json = tree2json(tree)
+    return json2query(json)
 }
 
 function query_2_json(arg, opts) {

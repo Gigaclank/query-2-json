@@ -5,6 +5,12 @@ This changelog follows the format mentioned in https://keepachangelog.com/en/1.0
 
 Versioning follows sematic versioning https://semver.org/
 
+## [1.1.2] - 2019-10-04
+### Added 
+ - Function to convert ant d tree json format to json 
+ - Function to convert ant d tree to rule
+ - Tests for the new functions 
+
 ## [1.0.3] - 2019-10-04
 ### Added 
  - Added new functions to convert the json structure into ant d tree format
