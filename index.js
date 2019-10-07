@@ -223,8 +223,10 @@ function json2tree(obj) {
             treeObj.title = obj.condition.toUpperCase()
             obj.rules.forEach(r => {
                 let ch = json2tree(r)
-                if (ch != null)
+                if (ch != null) {
+                    ch.ParentKey = treeObj.key
                     treeObj.children.push(ch)
+                }
             })
 
         } else if (obj.id.indexOf("r-") != -1) {
@@ -249,8 +251,10 @@ function tree2json(obj) {
             treeObj.condition = obj.title.trim().toLowerCase()
             obj.children.forEach(r => {
                 let ch = tree2json(r)
-                if (ch != null)
+                if (ch != null) {
+                    ch.ParentId = treeObj.id
                     treeObj.rules.push(ch)
+                }
             })
 
         } else if (obj.key.indexOf("r-") != -1) {
