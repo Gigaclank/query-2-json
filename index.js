@@ -89,6 +89,8 @@ function json2query(input) {
         group.rules.forEach(function (rule) {
             if (rule.rules && rule.rules.length > 0) {
                 parts.push(parse(rule, level + 1));
+            } else if (rule.rules && rule.rules.length == 0) {
+                return
             } else {
                 let op = ""
                 switch (rule.operator.toLowerCase()) {
