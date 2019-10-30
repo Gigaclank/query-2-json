@@ -197,7 +197,7 @@ function query2json(str, opts) {
             }
             if (r != '') {
                 let rules = r.trim().replace(" ", "");
-                let fields = rules.trim().split(/[\*\=\!\/\%\<\>]{1,3}/g)//split into left and right
+                let fields = rules.trim().split(/(?!\])(?<!\[)[\*\=\!\/\%\<\>]{1,3}/g)//split into left and right
                 let operator = rules.trim().replace(fields[0], "").replace(fields[1], "").trim()
                 let obj = {
                     id: "r-" + Math.random().toString(36).substr(2, 9),
@@ -260,7 +260,7 @@ function tree2json(obj) {
         } else if (obj.key.indexOf("r-") != -1) {
             treeObj.id = obj.key
             let rules = obj.title.trim().replace(" ", "");
-            let fields = rules.trim().split(/[\*\=\!\/\%\<\>]{1,3}/g)//split into left and right
+            let fields = rules.trim().split(/(?!\])(?<!\[)[\*\=\!\/\%\<\>]{1,3}/g)//split into left and right
             let operator = rules.trim().replace(fields[0], "").replace(fields[1], "").trim()
             treeObj.field = fields[0] ? fields[0].trim() : ""
             treeObj.operator = operator

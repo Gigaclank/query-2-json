@@ -1,6 +1,6 @@
 {
   "name": "query-2-json",
-  "version": "1.2.2",
+  "version": "1.2.4",
   "description": "convert a query string to a json structure",
   "main": "index.js",
   "scripts": {
@@ -26,5 +26,8 @@
     "eslint": "^6.5.1",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2"
+  },
+  "dependencies": {
+    "mocha": "^6.2.2"
   }
 }

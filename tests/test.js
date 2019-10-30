@@ -1,7 +1,8 @@
 var assert = require('assert');
 const q2j = require('../index')
 
-let q = "(a != 1 || (b == 2 && c <= 3)) && (d != 4)"
+let q = "protocolID == \"DNP3\" && vector1Size >= 100"
+// "(a != 1 || (b == 2 && c <= 3)) && (d != 4)"
 
 isObject = function (a) {
     return (!!a) && (a.constructor === Object);
